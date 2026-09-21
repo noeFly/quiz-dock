@@ -4,6 +4,33 @@ All notable changes to QuizDock are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com); versions follow
 [Semantic Versioning](https://semver.org). Generated from conventional commits.
 
+## [0.5.1] - 2026-09-21
+
+### Bug Fixes
+
+- :latest no longer overwritten by the standalone image; non-root everywhere *(docker)*
+- Prisma 7.10 drops hono/valibot, overrides for qs and body-parser *(deps)*
+- Bake the schema engine matching the runtime so migrate works offline *(docker)*
+
+### Documentation
+
+- The standalone scan raises the npm alerts until the next release *(security)*
+- Audit of the 48 code-scanning alerts — :latest was the standalone image *(security)*
+- A 15-second GIF of a session on the big screen under the pitch *(readme)*
+- One row of badges, main features first, local vs OIDC table, six screenshots *(readme)*
+- Local mode vs OIDC mode among the features *(readme)*
+- Link to the public demo instance *(readme)*
+
+### Features
+
+- Update tranditional chinese translations *(i18n)*
+
+### Contributors
+
+- fchaussin
+- noeFly
+- Francois Chaussin
+
 ## [0.5.0] - 2026-09-20
 
 ### Bug Fixes
