@@ -187,5 +187,11 @@ jobs:
             echo "RENDER_DEPLOY_HOOK not set — demo not redeployed."
             exit 0
           fi
-          curl -fsS -X POST "$HOOK" >/dev/null
-          echo "Render deploy triggered."
+          # Render answers 404 when the service was recreated or the hook key
+          # regenerated: say so, instead of a bare `curl: (22)`.
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$HOOK")
+          case "$code" in
+            2*) echo "Render deploy triggered (HTTP $code)." ;;
+            404) echo "::error::Render deploy hook answered 404 — the RENDER_DEPLOY_HOOK secret no longer matches the service. Copy the current Deploy Hook URL from Render → Settings, then: gh secret set RENDER_DEPLOY_HOOK && gh run rerun $GITHUB_RUN_ID --failed"; exit 1 ;;
+            *) echo "::error::Render deploy hook answered HTTP $code."; exit 1 ;;
+          esac
