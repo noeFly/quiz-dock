@@ -106,14 +106,14 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - '${FRONTEND_PORT:-18081}:80'
+      - '${FRONTEND_PORT:-18081}:8080'
     volumes:
       # Override logo + CSS sans rebuild (remplace les fichiers servis).
       - ./branding:/usr/share/nginx/html/branding:ro
-    # --- Durcissement : nginx:alpine bind :80 en root → on garde no-new-privileges
-    # seul (un cap_drop ALL casserait le bind <1024 / le setuid des workers). Pour
-    # un non-root complet, basculer sur nginxinc/nginx-unprivileged (port 8080).
+    # --- Durcissement : nginx-unprivileged tourne en uid 101 et écoute :8080
+    # (> 1024) → aucune capability requise, pas d'escalade.
     security_opt: ['no-new-privileges:true']
+    cap_drop: ['ALL']
     networks: [public]
 
 volumes:

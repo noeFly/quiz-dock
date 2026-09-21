@@ -64,15 +64,25 @@ jobs:
       - name: pnpm audit (high+critical) — gate
         run: pnpm audit --prod --audit-level high
 
-  # ---- Image publiée : RAPPORT (non bloquant) ----
+  # ---- Images publiées : RAPPORT (non bloquant) ----
+  # Les deux images ont des bases différentes (distroless vs bookworm-slim + Postgres
+  # + Redis) → un scan chacune, catégorie SARIF distincte pour lire l'onglet Security.
   image:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # `trivy-image` garde son nom historique : GitHub ne ferme les alertes
+          # d'une catégorie que si elle est ré-analysée.
+          - { tag: latest, category: trivy-image }
+          - { tag: standalone, category: trivy-image-standalone }
     steps:
-      - name: Trivy — image publiée (:latest)
+      - name: Trivy — image publiée (:${{ matrix.tag }})
         uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         continue-on-error: true # CVE OS sans patch ne doivent pas casser la CI
         with:
-          image-ref: fchaussin/quizdock:latest
+          image-ref: fchaussin/quizdock:${{ matrix.tag }}
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           scanners: vuln
@@ -84,4 +94,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-image.sarif
-          category: trivy-image
+          category: ${{ matrix.category }}

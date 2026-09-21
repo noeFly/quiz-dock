@@ -8,15 +8,24 @@
 # only adds the databases + a tiny supervisor. NOT hardened (Postgres/Redis need
 # to write) and NOT for serious production — use the multi-service compose there.
 
-# Exact app build, already produced by the main image.
-FROM fchaussin/quizdock:latest AS app
+# Exact app build, already produced by the main image. Pinned to the release tag
+# (release.yml passes X.Y.Z); `latest` only for a local build by hand.
+ARG APP_IMAGE_TAG=latest
+# DS-0001: the tag IS pinned (build-arg, X.Y.Z in CI) — Trivy can't see through the ARG.
+#trivy:ignore:AVD-DS-0001
+FROM fchaussin/quizdock:${APP_IMAGE_TAG} AS app
 
 FROM node:24-bookworm-slim AS runtime
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
+ # Pull Debian security fixes even when the base layer is a few days old.
+ && apt-get upgrade -y --no-install-recommends \
  && apt-get install -y --no-install-recommends \
       postgresql postgresql-contrib redis-server tini ca-certificates \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ # npm/corepack/yarn are never invoked at runtime (the app ships its node_modules);
+ # dropping them removes the CVEs of npm's bundled deps (tar, undici, …) from the image.
+ && rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
 
 # Non-root runtime user that owns /data. A NAMED volume mounted at /data inherits
 # this ownership on first init (so Postgres can write its cluster there).
@@ -40,8 +49,12 @@ ENV NODE_ENV=production \
     DATABASE_URL=postgresql://quizdock@127.0.0.1:5432/quizdock \
     REDIS_URL=redis://127.0.0.1:6379 \
     APP_NAME=QuizDock \
-    APP_LANG=en \
-    AUTH_MODE=none
+    APP_LANG=en
+
+# Auth *mode* selector (none | oidc), not a credential — Trivy DS-0031 matches on
+# the "AUTH" substring.
+#trivy:ignore:AVD-DS-0031
+ENV AUTH_MODE=none
 
 WORKDIR /app
 USER quizdock
