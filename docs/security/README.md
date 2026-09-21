@@ -7,14 +7,15 @@ How QuizDock is scanned, hardened and audited.
 - [`.github/workflows/security.yml`](../../.github/workflows/security.yml) runs on every
   push to `main`, every PR and weekly:
   - **`deps`** — `pnpm audit` (high/critical **gate**) + Trivy filesystem scan.
-  - **`image`** — Trivy scan of the published image (**reports** to the Security tab,
-    non-blocking for unfixable base-OS CVEs).
+  - **`image`** — Trivy scan of the published `:latest` and `:standalone` images
+    (**reports** to the Security tab, non-blocking for unfixable base-OS CVEs).
 - Findings land in the repository **Security → Code scanning** tab (SARIF).
 
 ## Point-in-time audits
 
 | Date | Report |
 |---|---|
+| 2026-09-21 | [`cve-audit-2026-09-21.md`](cve-audit-2026-09-21.md) — `:latest` was the standalone image; Prisma 7.10 drops hono; non-root dev images |
 | 2026-06-25 | [`cve-audit-2026-06-25.md`](cve-audit-2026-06-25.md) |
 
 ## Runtime hardening
