@@ -9,6 +9,11 @@
 FROM node:24-bookworm-slim AS build
 RUN corepack enable
 WORKDIR /app
+# Pin the schema-engine binary target. bookworm-slim ships no libssl, so Prisma's
+# platform detection falls back to "debian-openssl-1.1.x" and bakes that engine —
+# while the distroless runtime (libssl3) detects "debian-openssl-3.0.x" and tries
+# to download it at `migrate deploy` time (breaks air-gapped deploys, #31).
+ENV PRISMA_CLI_BINARY_TARGETS=debian-openssl-3.0.x
 
 # Manifests d'abord (cache des couches d'install).
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .npmrc tsconfig.base.json ./
