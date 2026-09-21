@@ -18,12 +18,12 @@ reference, the others follow its sense, not its words.
 | host | Host | Animateur | Anfitrión | 主持人 | 主持人 | live |
 | host seat | Host seat | Siège hôte | Asiento de anfitrión | 主持席位 | 主持席位 | local auth mode |
 | participant | Participant | Participant | Participante | 参与者 | 參與者 | live, console tab |
-| nickname | Nickname | Pseudo | Apodo | 昵称 | 暱稱 | join |
+| nickname | Nickname | Pseudo | Apodo | 昵称 | 匿稱 | join |
 | session | Session | Session | Sesión | 会话 | 會話 | a quiz being played |
 | console | Console | Console | Consola | 控制台 | 控制台 | `/session/:pin/console` |
 | projection | Projection | Projection | Proyección | 投影 | 投影 | `/session/:pin/projection` |
 | join / PIN | Join · PIN code | Rejoindre · Code PIN | Unirse · Código PIN | 加入 · PIN 码 | 加入 · PIN 碼 | `/join` |
-| reviews | Reviews | Avis | Opiniones | 评价 | 評價 | `/quizzes/:id/reviews` |
+| reviews | Reviews | Avis | Opiniones | 评价 | 回饋 | `/quizzes/:id/reviews` |
 | history | History | Historique | Historial | 历史 | 歷史 | `/quizzes/:id/history` |
 
 ## Content
@@ -31,7 +31,7 @@ reference, the others follow its sense, not its words.
 | Term | en | fr | es | zh | zh-TW |
 | --- | --- | --- | --- | --- | --- |
 | question | Question | Question | Pregunta | 题目 | 題目 |
-| slide | Slide | Slide | Diapositiva | 幻灯片 | 投影片 |
+| slide | Slide | Slide | Diapositiva | 幻灯片 | 簡報 |
 | option (answer choice) | Option | Option | Opción | 选项 | 選項 |
 | explanation | Explanation | Explication | Explicación | 解析 | 解析 |
 | background | Background | Fond | Fondo | 背景 | 背景 |
@@ -77,7 +77,7 @@ reference, the others follow its sense, not its words.
 - **participant, not player**: the people answering may be students or
   colleagues; *player* only survives in code identifiers and route ids.
 - **slide**: kept in French (common in presentation software); es
-  *diapositiva*; zh-TW *投影片* (Taiwan usage), zh *幻灯片*.
+  *diapositiva*; zh-TW *簡報* (noeFly's choice, #16), zh *幻灯片*.
 - **console / projection**: the two host screens. *Console* is the control
   surface (never *dashboard*, which is *My quizzes*); *projection* is the big
   screen (never *display* or *screen*, too generic).
@@ -103,9 +103,12 @@ reference, the others follow its sense, not its words.
 - **host seat**: the single-host lock of local mode; *claim*, *extend*,
   *release* are its verbs (never *login* for the seat itself).
 - **Taiwan usage in zh-TW**: 資料 (data), 檔案 (file), 清單 (list), 拖曳
-  (drag), 送出 (submit), 自訂 (custom), 置中 (centre), 投影片 (slide), 「」
-  quotes. zh-TW is resolved straight to `en`, never through `zh`. The locale
-  was contributed by [@noeFly](https://github.com/noeFly) (#1); later keys are
-  machine-assisted and follow their choices — native review welcome.
+  (drag), 送出 (submit), 儲存 (save), 自訂 (custom), 置中 (centre), 連線
+  (connect — 連接 only in 連接埠, port), 簡報 (slide), 匿稱 (nickname), 回饋
+  (feedback), 登出 (log out), 是非題 / 單選題 / 多選題 / 排序題 / 投票題
+  (question types), 畫面 for an app screen vs 螢幕 for the physical one,
+  「」 quotes, 破折號 ——. zh-TW is resolved straight to `en`, never through
+  `zh`. The locale was contributed and reviewed by [@noeFly](https://github.com/noeFly) (#1, #16); later keys
+  are machine-assisted and follow their choices — native review welcome.
 - **No jargon leaks**: tokenised error codes (`quiz.not_found`…) are
   translated in `errors.json`; the interface never shows a code.

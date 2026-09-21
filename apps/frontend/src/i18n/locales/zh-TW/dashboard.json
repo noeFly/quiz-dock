@@ -10,7 +10,7 @@
   "resume": "繼續",
   "stop": "停止",
   "stopConfirmTitle": "停止會話？",
-  "stopConfirmDescription": "當前會話將對所有已連接的玩家永久結束。",
+  "stopConfirmDescription": "當前會話將對所有已連線的玩家永久結束。",
   "stopConfirmLabel": "停止會話",
   "loadError": "無法載入測驗。",
   "empty": "還沒有測驗。創建一個吧！",

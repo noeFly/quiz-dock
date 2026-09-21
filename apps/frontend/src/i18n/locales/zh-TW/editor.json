@@ -279,6 +279,6 @@
     "running_other": "{{count}} 場進行中",
     "players_one": "{{count}} 名玩家",
     "players_other": "{{count}} 名玩家",
-    "liveEditsHint": "版面修改（背景、對比度、解析、投影片）會在進行中的場次下一步生效；題目和答案保持啟動時的版本。"
+    "liveEditsHint": "版面修改（背景、對比度、解析、簡報）會在進行中的場次下一步生效；題目和答案保持啟動時的版本。"
   }
 }

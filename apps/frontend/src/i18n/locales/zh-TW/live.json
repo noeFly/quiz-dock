@@ -61,7 +61,7 @@
     "resume": "繼續",
     "pause": "暫停",
     "timeRemaining": "剩餘時間",
-    "podium": "🏆 領獎台",
+    "podium": "🏆 頒獎臺",
     "outline": "測驗大綱",
     "questionDone": "已完成",
     "questionCurrent": "進行中",
@@ -111,7 +111,7 @@
     "qrLabel": "加入用 QRCode",
     "exitFullscreen": "退出全螢幕",
     "fullscreen": "全螢幕",
-    "podium": "🏆 領獎台",
+    "podium": "🏆 頒獎臺",
     "answersReceived": "已收到答案：",
     "paused": "會話已暫停…",
     "thanks": "感謝參與！🎉",
@@ -133,7 +133,7 @@
     "connecting": "連線中…",
     "letsGo": "開始吧！",
     "connectingToSession": "正在連線會話…",
-    "kickedTitle": "你已被移出會話。",
+    "kickedTitle": "你已被踢出會話。",
     "kickedDescription_one": "主持人已將你停權 {{count}} 分鐘。",
     "kickedDescription_other": "主持人已將你停權 {{count}} 分鐘。",
     "hostDisconnected": "主持人已斷開連線 - 會話暫停。",
@@ -185,13 +185,13 @@
   "rating": {
     "thanks": "感謝你的回饋 🙏",
     "sendFailed": "發送失敗。請檢查網路後重試。",
-    "rejected": "評價被拒絕：會話可能尚未結束。",
-    "title": "你對這個測驗的評價",
+    "rejected": "回饋被拒絕：會話可能尚未結束。",
+    "title": "你對這個測驗的回饋",
     "starLabel_one": "{{count}} 星",
     "starLabel_other": "{{count}} 星",
     "commentPlaceholder": "想說點什麼？（可選）",
     "sending": "發送中…",
-    "send": "提交評價"
+    "send": "提交回饋"
   },
   "errors": {
     "sessionNotFound": "未找到會話或會話已結束。",
