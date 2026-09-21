@@ -17,11 +17,15 @@ ENV APP_VERSION=$APP_VERSION
 RUN pnpm --filter @quiz-dock/contracts build \
  && pnpm --filter @quiz-dock/frontend build
 
-# ---- runtime (Nginx statique) ----
-FROM nginx:alpine AS runtime
+# ---- runtime (Nginx statique, non-root : uid 101 `nginx`, écoute :8080) ----
+FROM nginxinc/nginx-unprivileged:alpine AS runtime
 COPY apps/frontend/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/apps/frontend/dist /usr/share/nginx/html
+# Racine web possédée par l'uid nginx : l'entrypoint y écrit /config.js au démarrage.
+COPY --from=build --chown=nginx:nginx /app/apps/frontend/dist /usr/share/nginx/html
 # White-label : régénère /config.js depuis $APP_NAME au démarrage (avant nginx).
-COPY apps/frontend/docker-entrypoint.sh /docker-entrypoint.d/40-generate-config.sh
-RUN chmod +x /docker-entrypoint.d/40-generate-config.sh
-EXPOSE 80
+COPY --chmod=755 apps/frontend/docker-entrypoint.sh /docker-entrypoint.d/40-generate-config.sh
+# Déjà l'utilisateur de l'image unprivileged — rendu explicite (scanners, lecteurs).
+USER nginx
+EXPOSE 8080
+HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
+  CMD ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]

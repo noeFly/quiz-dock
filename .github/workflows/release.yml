@@ -119,7 +119,7 @@ jobs:
           readme-filepath: ./README.md
 
   # All-in-one image (Postgres + Redis + app) for one-command beginner use.
-  # Reuses the :latest artifact published above (COPY --from), so it runs after.
+  # Reuses the exact artifact published above (COPY --from the X.Y.Z tag), so it runs after.
   standalone:
     needs: publish
     runs-on: ubuntu-latest
@@ -147,6 +147,16 @@ jobs:
           tags: |
             type=raw,value=standalone
             type=semver,pattern=standalone-{{version}}
+          # metadata-action's default `latest=auto` appends `latest` whenever a
+          # semver tag matches — that silently re-pointed :latest at THIS image
+          # after every release. :latest belongs to the hardened image above.
+          flavor: latest=false
+
+      # Pin the FROM of Dockerfile.standalone to the X.Y.Z image just pushed
+      # (not a floating :latest, which depends on job order and registry state).
+      - name: App image tag (X.Y.Z from vX.Y.Z)
+        id: app
+        run: echo "tag=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
       - name: Build & push standalone (multi-arch)
         uses: docker/build-push-action@v6
@@ -159,6 +169,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             APP_VERSION=${{ github.ref_name }}
+            APP_IMAGE_TAG=${{ steps.app.outputs.tag }}
           cache-from: type=gha,scope=standalone
           cache-to: type=gha,mode=max,scope=standalone
 
